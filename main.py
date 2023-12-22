@@ -31,53 +31,30 @@ class Record:
         self.phones = []
 
     def add_phone(self, phone):
-        #print(f"додаю номер {phone}")
         phone_obj = Phone(phone)
         self.phones.append(phone_obj)
-        #print(f"***add_phone***\n{phone_obj} -- номер додано")
 
     def remove_phone(self, phone):
-        print(f"видаляю номер {phone}")
-        for contact in self.phones:
-            if contact.value == phone:
-                self.phones.remove(contact)
-                print(f"***remove_phone***\n{contact} -- номер видалено")
-                break
+        drop_contact = self.find_phone(phone)
+        if drop_contact:
+            self.phones.remove(drop_contact)
 
     def edit_phone(self, old_phone, new_phone):
-        contacts_edit_phone = [contact.value for contact in self.phones]
-        print(f"зараз у списку такі номери {contacts_edit_phone}")
-        print(f"редагую номер {old_phone}")
-        try:
-            for p in self.phones:
-                print()
-                if p.value == old_phone:
-
-                    self.remove_phone(old_phone)
-                    self.add_phone(new_phone)
-                    print(f"***edit_phone***\n{old_phone} змінено на {new_phone}")
-                    break
-            else:
-                raise ValueError(f"Phone {old_phone} not found in the record.")
-        except ValueError:
-            print(f"Phone {old_phone} not found in the record.")
+        if self.find_phone(old_phone):
+            self.remove_phone(old_phone)
+            self.add_phone(new_phone)
+        else:
+            raise ValueError(f"Phone {old_phone} not found in the record.")
 
     def find_phone(self, phone):
-        
-        contacts_find_phone = [contact.value for contact in self.phones]
-        print(f"зараз у списку такі номери {contacts_find_phone}")
-        print(f"шукаю номер {phone}")
         try:
-            for p in self.phones:
-                if p.value == phone:
-                    
-                    return p.value
-                    print(f"***find_phone***\n{p.value} знайдено")
-                    break
+            for contact in self.phones:
+                if contact.value == phone:
+                    return contact
 
             raise ValueError(f"Phone {phone} not found in the record.")
         except ValueError:
-            print(f"Phone {phone} not found in the record.")
+            pass #print(f"Phone {phone} not found in the record.")
 
     def __str__(self):
         return f"Contact name: {self.name.value}, phones: {'; '.join(contact.value for contact in self.phones)}"
@@ -98,7 +75,7 @@ class AddressBook(UserDict):
             else:
                 raise KeyError(f"Record with name {name} not found in the address book.")
         except KeyError:
-            print(f"Record with name {name} not found in the address book.")
+            pass #print(f"Record with name {name} not found in the address book.")
         
 
 book = AddressBook()
